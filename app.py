@@ -8,11 +8,10 @@ st.title("Loan Risk App")
 # ---- تدريب الـ model من البيانات ----
 @st.cache_resource
 def train_model():
-    # <-- غيرنا هنا: separator = ;
     df = pd.read_csv("ML_Result.csv", sep=";")
     
-    # نظف الأسماء
-    df["Risk_Status"] = df["Risk_Status"].str.extract(r'(High Risk|Low Risk)')
+    # <-- غيرنا هنا: استخدم Predicted_Risk
+    df["Risk_Status"] = df["Predicted_Risk"].str.extract(r'(High Risk|Low Risk)')
     
     X = df[["Age", "Annual_Income", "Loan_Amount", "Loan_Interest_Rate", "Employment_Years", "Credit_Score"]]
     y = df["Risk_Status"]
