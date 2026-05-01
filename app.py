@@ -1,5 +1,6 @@
 import streamlit as st
 import pickle
+import pandas as pd
 
 model = pickle.load(open("loan_model.pkl", "rb"))
 
@@ -9,4 +10,7 @@ age = st.number_input("Age")
 income = st.number_input("Income")
 
 if st.button("Predict"):
-    st.write("Prediction done")
+    data = pd.DataFrame([[age, income]], columns=["Age", "Income"])
+    prediction = model.predict(data)
+
+    st.write("Prediction:", prediction[0])
