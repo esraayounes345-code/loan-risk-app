@@ -4,7 +4,7 @@ import pandas as pd
 
 # إعداد الصفحة
 st.set_page_config(
-    page_title="QNB Premium Loan Risk",
+    page_title="QNB Elite Loan Risk",
     page_icon="🏦",
     layout="wide"
 )
@@ -12,63 +12,83 @@ st.set_page_config(
 # تحميل الموديل
 model = pickle.load(open("loan_model.pkl", "rb"))
 
-# CSS احترافي
+# تصميم احترافي
 st.markdown("""
 <style>
 
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(to right, #f3f0ff, #ffffff);
+    background: linear-gradient(135deg, #12071f, #2e1065, #0f172a);
+}
+
+[data-testid="stHeader"] {
+    background: transparent;
 }
 
 .main-title {
     text-align: center;
-    color: #4B1D74;
-    font-size: 48px;
+    font-size: 55px;
     font-weight: bold;
+    background: linear-gradient(to right, #ffffff, #d8b4fe, #facc15);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 10px;
 }
 
 .subtitle {
     text-align: center;
-    color: #777;
+    color: #d1d5db;
     font-size: 18px;
     margin-bottom: 30px;
 }
 
-.input-box {
-    background-color: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+.card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 35px;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .stButton>button {
-    background: linear-gradient(to right, #4B1D74, #8B5CF6);
-    color: white;
-    border-radius: 15px;
-    height: 55px;
-    width: 100%;
+    background: linear-gradient(to right, #7c3aed, #facc15);
+    color: black;
     font-size: 20px;
+    font-weight: bold;
+    border-radius: 18px;
+    width: 100%;
+    height: 60px;
     border: none;
 }
 
 .stButton>button:hover {
-    background: linear-gradient(to right, #8B5CF6, #4B1D74);
+    box-shadow: 0px 0px 20px rgba(250,204,21,0.6);
+}
+
+.result-box {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 20px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# Header
+# لوجو
 st.image(
     "https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/QNB_Group_Logo.svg/512px-QNB_Group_Logo.svg.png",
     width=140
 )
 
-st.markdown('<p class="main-title">QNB Premium Loan Risk</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Smart AI Banking Decision System</p>', unsafe_allow_html=True)
+# عنوان
+st.markdown('<div class="main-title">QNB Elite Loan Risk</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">AI Banking Intelligence System</div>', unsafe_allow_html=True)
 
-# Inputs داخل Box
-st.markdown('<div class="input-box">', unsafe_allow_html=True)
+# كارت الإدخال
+st.markdown('<div class="card">', unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 
@@ -84,9 +104,7 @@ with col2:
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-st.write("")
-
-# Predict
+# زر التوقع
 if st.button("Predict Loan Risk"):
 
     data = pd.DataFrame({
@@ -107,6 +125,12 @@ if st.button("Predict Loan Risk"):
         interest_rate > 15 or
         employment_years < 2
     ):
-        st.error("⚠️ High Risk Customer")
+        st.markdown(
+            '<div class="result-box" style="background:#7f1d1d;color:white;">⚠️ High Risk Customer</div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.success("✅ Low Risk Customer")
+        st.markdown(
+            '<div class="result-box" style="background:#14532d;color:white;">✅ Low Risk Customer</div>',
+            unsafe_allow_html=True
+        )
