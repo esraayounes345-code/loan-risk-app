@@ -7,4 +7,4 @@ age = st.number_input("Age")
 income = st.number_input("Income")
 
 if st.button("Predict"):
-    st.write("App works successfully")
+    st.write("App  works successfully")
