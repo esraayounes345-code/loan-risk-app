@@ -5,16 +5,20 @@ from sklearn.ensemble import RandomForestClassifier
 
 st.title("Loan Risk App")
 
-# ---- تدريب الـ model من البيانات ----
 @st.cache_resource
 def train_model():
     df = pd.read_csv("ML_Result.csv", sep=";")
     
-    # <-- غيرنا هنا: استخدم Predicted_Risk
-    df["Risk_Status"] = df["Predicted_Risk"].str.extract(r'(High Risk|Low Risk)')
+    # <-- نستخدم العمود الأخير (Predicted_Risk) وناخد High Risk أو Low Risk بس
+    df["Target"] = df["Predicted_Risk"].str.extract(r'(High Risk|Low Risk)')
     
     X = df[["Age", "Annual_Income", "Loan_Amount", "Loan_Interest_Rate", "Employment_Years", "Credit_Score"]]
-    y = df["Risk_Status"]
+    y = df["Target"]
+    
+    # نشيل الصفوف اللي مفيش قيمة فيها
+    valid = y.notna()
+    X = X[valid]
+    y = y[valid]
     
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
@@ -26,7 +30,6 @@ def train_model():
 
 model, scaler = train_model()
 
-# ---- الـ UI ----
 age = st.number_input("Age")
 income = st.number_input("Annual Income")
 loan_amount = st.number_input("Loan Amount")
