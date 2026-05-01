@@ -2,13 +2,39 @@ import streamlit as st
 import pickle
 import pandas as pd
 
+# إعداد الصفحة
+st.set_page_config(
+    page_title="QNB Loan Risk App",
+    page_icon="🏦",
+    layout="centered"
+)
+
 # تحميل الموديل
 model = pickle.load(open("loan_model.pkl", "rb"))
 
-# عنوان التطبيق
-st.title("Loan Risk App")
+# لوجو + عنوان
+st.image(
+    "https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/QNB_Group_Logo.svg/512px-QNB_Group_Logo.svg.png",
+    width=120
+)
 
-# إدخال البيانات
+st.markdown("""
+<h1 style='text-align: center; color: #5A2D82;'>
+QNB Loan Risk Prediction
+</h1>
+
+<p style='text-align: center; color: gray;'>
+Predict customer loan risk using Machine Learning
+</p>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# Sidebar
+st.sidebar.header("About")
+st.sidebar.write("Loan Risk Prediction App using Machine Learning.")
+
+# Inputs
 age = st.number_input("Age", min_value=18, max_value=100, value=30)
 income = st.number_input("Annual Income", min_value=0.0, value=50000.0)
 loan_amount = st.number_input("Loan Amount", min_value=0.0, value=10000.0)
@@ -17,9 +43,8 @@ employment_years = st.number_input("Employment Years", min_value=0.0, value=5.0)
 credit_score = st.number_input("Credit Score", min_value=300.0, max_value=850.0, value=700.0)
 
 # زر التوقع
-if st.button("Predict"):
+if st.button("Predict Loan Risk"):
 
-    # تجهيز البيانات
     data = pd.DataFrame({
         "Age": [age],
         "Annual_Income": [income],
@@ -29,10 +54,8 @@ if st.button("Predict"):
         "Credit_Score": [credit_score]
     })
 
-    # توقع الموديل
     prediction = model.predict(data)
 
-    # قواعد إضافية لإظهار High Risk بوضوح
     if (
         income < 20000 or
         credit_score < 500 or
@@ -40,6 +63,6 @@ if st.button("Predict"):
         interest_rate > 15 or
         employment_years < 2
     ):
-        st.error("Prediction: High Risk ⚠️")
+        st.error("⚠️ High Risk Customer")
     else:
-        st.success("Prediction: Low Risk ✅")
+        st.success("✅ Low Risk Customer")
